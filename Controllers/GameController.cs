@@ -69,9 +69,8 @@ namespace MyGamesStore.Controllers
         }
 
         //DELETE: Games/Delete/{id}
-        [HttpDelete("Delete")]
-        [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(int id)
+        [HttpGet]
+        public IActionResult Delete(int? id)
         {
             var game = _context.Game.Find(id);
             _context.Game.Remove(game);
@@ -102,22 +101,6 @@ namespace MyGamesStore.Controllers
         //[Route("Game/Edit/{id}")]
         [HttpGet]
         public IActionResult Edit(int? id)
-        {
-            if (id == null)
-            {
-                return BadRequest();
-            }
-            var games = _context.Game.Find(id);
-
-            if (games == null) {
-                return NotFound();
-            }
-
-            return View(games);
-        }
-
-        [HttpGet]
-        public IActionResult Delete(int? id)
         {
             if (id == null)
             {

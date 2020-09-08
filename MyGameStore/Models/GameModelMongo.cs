@@ -6,11 +6,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MyGameStore.Models
 {
-    [BsonIgnoreExtraElements]
     public class GameModelMongo
     {
         [BsonId]
-        public ObjectId id { get; set; }
+        public ObjectId Id { get; set; }
         public string Publisher { get; set; }
         public string Title { get;set;}
         public DateTime ReleaseDate { get; set; }

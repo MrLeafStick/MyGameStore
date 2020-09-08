@@ -10,6 +10,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MyGameStore.Data;
 using Microsoft.EntityFrameworkCore;
+using MyGameStore.Models;
+using Microsoft.Extensions.Options;
+using MyGameStore.Controllers.Services;
 
 namespace MyGameStore
 {
@@ -27,7 +30,16 @@ namespace MyGameStore
         {
             services.AddControllersWithViews();
 
-            services.AddDbContext<MyGameStoreContext>(options => 
+                // requires using Microsoft.Extensions.Options
+            services.Configure<GameStoreDatabaseSettings>(
+                Configuration.GetSection(nameof(GameStoreDatabaseSettings)));
+
+            services.AddSingleton<IGameStoreDatabaseSettings>(sp =>
+                sp.GetRequiredService<IOptions<GameStoreDatabaseSettings>>().Value);
+
+            services.AddSingleton<MongoGameService>();
+
+            services.AddDbContext<MyGameStoreContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("MyGameStoreContext")));
         }
 

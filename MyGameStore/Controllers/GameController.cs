@@ -22,21 +22,6 @@ namespace MyGameStore.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> IndexMongo()
-        {
-            var connectionString = "mongodb://localhost:27017";
-            var client = new MongoClient(connectionString);
-            var database = client.GetDatabase("Gamestore");
-            var collection = database.GetCollection<GameModelMongo>("Game");
-            var games = await collection.Find(new BsonDocument()).ToListAsync();
-
-            var Mongogame = new GameModelMongo();
-
-            var mongos = from g in games select g;
-
-            return View(mongos);
-        }
-
         //GET: Games
         public async Task<IActionResult> Index(string gameGenre, string searchString)
         {

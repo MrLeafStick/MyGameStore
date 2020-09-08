@@ -8,6 +8,8 @@ using System.Linq;
 using System.Security.Policy;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using MongoDB.Driver;
+using MongoDB.Bson;
 
 namespace MyGameStore.Controllers
 {
@@ -19,7 +21,27 @@ namespace MyGameStore.Controllers
         {
             _context = context;
         }
-        
+        public async Task<IActionResult> IndexMongo()
+        {
+            var connectionString = "mongodb://localhost:27017";
+            var client = new MongoClient(connectionString);
+            //var server = client.GetServer();
+            var database = client.GetDatabase("Gamestore");
+            var collection = database.GetCollection<GameModelMongo>("Game");
+
+            var games = await collection.Find(new BsonDocument()).ToListAsync();
+
+            foreach (GameModelMongo game in games)
+            {
+
+            }
+
+
+            return View();
+
+
+        }
+
         //GET: Games
         public async Task<IActionResult> Index(string gameGenre, string searchString)
         {
@@ -69,7 +91,7 @@ namespace MyGameStore.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create([Bind("Id, Title, Description, ReleaseDate, Genre, Publisher, Rating, Price, UnitsSold")]Game game)
         {
-            _context.Database.EnsureCreated();
+            
 
             if (ModelState.IsValid)
             {
@@ -140,6 +162,19 @@ namespace MyGameStore.Controllers
                 return RedirectToAction("Index");
             }
 
+            return View(game);
+
+        }
+
+        //GET: Game/Details/{id}
+        [HttpGet]
+        public IActionResult Details(int? id)
+        {
+            var game = _context.Game.Find(id);
+            if (game == null)
+            {
+                return NotFound();
+            }
             return View(game);
 
         }

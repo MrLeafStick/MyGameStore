@@ -16,6 +16,8 @@ namespace MyGameStore.Models
         {
             using (var context = new MyGameStoreContext(serviceProvider.GetRequiredService<DbContextOptions<MyGameStoreContext>>()))
             {
+                context.Database.EnsureCreated();
+
                 //look For Games
                 if (context.Game.Any())
                 {

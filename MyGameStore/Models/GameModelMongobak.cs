@@ -1,15 +1,12 @@
-﻿using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MyGameStore.Models
 {
-    public class GameModelMongo
+    public class GameModelMongobak
     {
-        [BsonId]
-        public ObjectId Id { get; set; }
+        public int Id { get; set; }
         public string Publisher { get; set; }
         public string Title { get;set;}
 

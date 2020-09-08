@@ -1,6 +1,6 @@
-﻿@model MyGameStore.Models.GamesGenreViewModel
+﻿@model MyGameStore.Models.GamesgenreViewModelMongo
 
-@{ 
+@{
     ViewData["Title"] = "index";
 }
 
@@ -18,8 +18,8 @@
             <option value="">All</option>
         </select>
 
-        Title: <input type="text" asp-for="SearchString" >
-        <input type="submit" value="Filter"/>
+        Title: <input type="text" asp-for="SearchString">
+        <input type="submit" value="Filter" />
     </p>
 </form>
 
@@ -59,22 +59,22 @@
 
         @foreach (var game in Model.Games)
         {
-        <tr>
-            <td>@Html.DisplayFor(x => game.Title)</td>
-            <td>@Html.DisplayFor(x => game.Description)</td>
-            <td>@Html.DisplayFor(x => game.Publisher)</td>
-            <td>@Html.DisplayFor(x => game.Rating)</td>
-            <td>@Html.DisplayFor(x => game.ReleaseDate)</td>
-            <td>@Html.DisplayFor(x => game.Genre)</td>
-            <td>@Html.DisplayFor(x => game.Price)</td>
-            <td>@Html.DisplayFor(x => game.UnitsSold)</td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = game.Id }) |
-                @Html.ActionLink("Details", "Details", new { id = game.Id }) |
-                @Html.ActionLink("Delete", "Delete", new { id = game.Id })
+            <tr>
+                <td>@Html.DisplayFor(x => game.Title)</td>
+                <td>@Html.DisplayFor(x => game.Description)</td>
+                <td>@Html.DisplayFor(x => game.Publisher)</td>
+                <td>@Html.DisplayFor(x => game.Rating)</td>
+                <td>@Html.DisplayFor(x => game.ReleaseDate)</td>
+                <td>@Html.DisplayFor(x => game.Genre)</td>
+                <td>@Html.DisplayFor(x => game.Price)</td>
+                <td>@Html.DisplayFor(x => game.UnitsSold)</td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = game.Id }) |
+                    @Html.ActionLink("Details", "Details", new { id = game.Id }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = game.Id })
 
-            </td>
-        </tr>
+                </td>
+            </tr>
         }
     </tbody>
 

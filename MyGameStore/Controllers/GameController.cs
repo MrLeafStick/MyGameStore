@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using MongoDB.Bson;
+using MongoDB.Driver;
 using MyGameStore.Data;
 using MyGameStore.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Policy;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace MyGameStore.Controllers
 {
@@ -48,8 +48,36 @@ namespace MyGameStore.Controllers
                 };
 
                 return View(gameGenreVm);
+        }
+
+        //GET: Games
+        [HttpGet]
+        public async Task<IActionResult> IndexMongo(string gameGenre, string searchString)
+        {
+
+            var connectionString = "mongodb://localhost:27017";
+            var client = new MongoClient(connectionString);
+
+            var database = client.GetDatabase("GameStore01");
+
+            var collection = database.GetCollection<GameModelMongo>("Game");
+
+            var games = await collection.Find(new BsonDocument()).ToListAsync();
+
+            foreach (GameModelMongo game in games)
+            {
+
+            }
 
 
+            var gameGenreVm = new GamesgenreViewModelMongo
+            {
+                Games = games
+            };
+
+            ViewData.Model = gameGenreVm;
+
+            return View(gameGenreVm);
         }
 
         [HttpPost]
@@ -160,6 +188,8 @@ namespace MyGameStore.Controllers
             return View(game);
 
         }
+
+
 
 
 

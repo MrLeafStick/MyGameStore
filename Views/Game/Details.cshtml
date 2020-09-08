@@ -1,0 +1,22 @@
+@model MyGamesStore.Models.Game
+
+@{
+    ViewData["Title"] = "Game Details";
+    Layout = "~/Views/shared/_Layout.cshtml";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<div>
+    @foreach(var property in ViewData.ModelMetadata.Properties)
+    {
+        var value = Model.GetType().GetProperty(property.PropertyName).GetValue(Model, null);
+        <div>
+            <div class="col-md-6">
+                <b>@(property.DisplayName??property.PropertyName):</b>
+                @Html.Raw(value)
+                <hr/>
+            </div>
+        </div>
+    }
+</div>

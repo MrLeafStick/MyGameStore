@@ -1,0 +1,46 @@
+@model IEnumerable<MyGamesStore.Models.Game>
+
+@{
+    ViewData["Title"] = "Delete Game";
+    Layout = "~/Views/shared/_Layout.cshtml";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+<table class="table table-striped table-hover">
+    <thead class="thead-dark">
+        <th>@Html.DisplayNameFor(x => x.Title)</th>
+        <th>@Html.DisplayNameFor(x => x.Description)</th>
+        <th>@Html.DisplayNameFor(x => x.Publisher)</th>
+        <th>@Html.DisplayNameFor(x => x.Rating)</th>
+        <th>@Html.DisplayNameFor(x => x.ReleaseDate)</th>
+        <th>@Html.DisplayNameFor(x => x.Genre)</th>
+        <th>@Html.DisplayNameFor(x => x.Price)</th>
+        <th></th>
+    </thead>
+    <tbody>
+        @if (Model != null) {
+            @foreach (var game in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(x => game.Title)</td>
+                    <td>@Html.DisplayFor(x => game.Description)</td>
+                    <td>@Html.DisplayFor(x => game.Publisher)</td>
+                    <td>@Html.DisplayFor(x => game.Rating)</td>
+                    <td>@Html.DisplayFor(x => game.ReleaseDate)</td>
+                    <td>@Html.DisplayFor(x => game.Genre)</td>
+                    <td>@Html.DisplayFor(x => game.Price)</td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = game.Id })
+                        @Html.ActionLink("Details", "Details", new { id = game.Id })
+                        @Html.ActionLink("Delete", "Delete", new { id = game.Id})
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

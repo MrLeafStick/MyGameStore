@@ -3,7 +3,6 @@ using MongoDB.Driver;
 using MyGameStore.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace MyGameStore.Controllers.Services
@@ -17,7 +16,13 @@ namespace MyGameStore.Controllers.Services
             var client = new MongoClient(settings.ConnectionString);
             var database = client.GetDatabase(settings.DatabaseName);
 
+
             _game = database.GetCollection<GameModelMongo>(settings.GameCollectionName);
+        }
+
+        public MongoGameService()
+        {
+
         }
 
         public List<GameModelMongo> Get() =>
@@ -35,11 +40,11 @@ namespace MyGameStore.Controllers.Services
         public void Update(ObjectId id, GameModelMongo gameIn) =>
             _game.ReplaceOne(game => game.Id == id, gameIn);
 
-        public void Remove(GameModelMongo bookIn) =>
-            _game.DeleteOne(book => book.Id == bookIn.Id);
+        public void Remove(GameModelMongo gameIn) =>
+            _game.DeleteOne(game => game.Id == gameIn.Id);
 
         public void Remove(ObjectId id) =>
-            _game.DeleteOne(book => book.Id == id);
+            _game.DeleteOne(game => game.Id == id);
 
     }
 }

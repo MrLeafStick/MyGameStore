@@ -27,16 +27,30 @@ namespace MyGameStore.Controllers
         public IActionResult Index()
         {
             var games = _game.Get();
-            var Mongogame = new GameModelMongo();
-            var mongos = from g in games select g;
 
-            return View(mongos);
+            return View(games);
         }
 
         //Post: Game/Create
-        [HttpPost]
-        public IActionResult Create()
+        public IActionResult Create(GameModelMongo game)
         {
+            _game.Create(game);
+
+            return View(game);
+        }
+
+        [HttpGet]
+        public IActionResult Edit(ObjectId id, GameModelMongo gameIn)
+        {
+            var game = _game.Get(id);
+
+            if (game == null)
+            {
+                return NotFound();
+            }
+
+            _game.Update(id, gameIn);
+
             return View();
         }
     }

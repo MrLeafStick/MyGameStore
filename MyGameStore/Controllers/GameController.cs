@@ -144,6 +144,23 @@ namespace MyGameStore.Controllers
 
         }
 
+        [HttpGet]
+        public IActionResult Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var game = _context.Game.Find(id);
+            if (game == null)
+            {
+                return NotFound();
+            }
+            return View(game);
+
+        }
+
 
 
     }

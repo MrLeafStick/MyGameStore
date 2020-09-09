@@ -69,7 +69,6 @@ namespace MyGameStore.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create([Bind("Id, Title, Description, ReleaseDate, Genre, Publisher, Rating, Price, UnitsSold")]Game game)
         {
-            _context.Database.EnsureCreated();
 
             if (ModelState.IsValid)
             {
@@ -111,6 +110,23 @@ namespace MyGameStore.Controllers
             return RedirectToAction("Index");
         }
 
+        // GET: Game/Details/{id}
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var Game = await _context.Game
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (Game == null)
+            {
+                return NotFound();
+            }
+
+            return View(Game);
+        }
 
         //GET: Game/Edit/{id}
         public IActionResult Edit(int? id)

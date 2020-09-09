@@ -27,4 +27,9 @@
     <PackageReference Include="mongocsharpdriver" Version="2.11.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\Services\MongoGameServices\" />
+    <Folder Include="Views\MongoGame\" />
+  </ItemGroup>
+
 </Project>

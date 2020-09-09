@@ -27,27 +27,44 @@ namespace MyGameStore.Controllers
         public IActionResult Index()
         {
             var games = _game.Get();
-
+            
             return View(games);
         }
 
         //Post: Game/Create
         public IActionResult Create(GameModelMongo game)
         {
-            _game.Create(game);
+
+            if (ModelState.IsValid)
+            {
+                var exists = game.Title;
+
+                if (game.Title != null)
+                {
+                    _game.Create(game);
+                }
+
+
+            }
 
             return View(game);
         }
 
-        [HttpGet]
-        public IActionResult Edit(ObjectId id, GameModelMongo gameIn)
+
+        public IActionResult Edit(string id, GameModelMongo gameIn)
         {
+
+            gameIn. = new ObjectId(id);
+            var filter = Builders<GameModelMongo>.Filter.Eq<"Id", gameIn.Id>
+
             var game = _game.Get(id);
 
             if (game == null)
             {
                 return NotFound();
             }
+
+            gameIn.Title = game.Title;
 
             _game.Update(id, gameIn);
 

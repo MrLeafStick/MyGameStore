@@ -120,10 +120,13 @@ namespace MyGameStore.Controllers
             }
 
             var games = _context.Game.Find(id);
+
             if (games == null)
             {
                 return NotFound();
             }
+
+
             return View(games);
 
         }

@@ -16,59 +16,99 @@ namespace MyGameStore.Controllers
 {
     public class MongoGameController : Controller
     {
-        private readonly MongoGameService _game;
+        //private readonly MongoGameService _game;
 
-        public MongoGameController(MongoGameService game)
+        //public MongoGameController(MongoGameService game)
+        //{
+        //    _game = game;
+        //}
+
+
+        private IMongoCollection<GameModelMongo> collection;
+
+        public MongoGameController()
         {
-            _game = game;
+            var client = new MongoClient("mongodb://localhost:27017");
+            IMongoDatabase db = client.GetDatabase("Gamestore");
+            collection = db.GetCollection<GameModelMongo>("Game");
         }
-        
+
+
 
         public IActionResult Index()
         {
-            var games = _game.Get();
-            
-            return View(games);
+            var model = collection.Find(FilterDefinition<GameModelMongo>.Empty).Limit(2500).ToList();
+
+            return View(model);
+
+
+
         }
 
         //Post: Game/Create
         public IActionResult Create(GameModelMongo game)
         {
 
-            if (ModelState.IsValid)
+
+            if (game.Title == null)
             {
-                var exists = game.Title;
-
-                if (game.Title != null)
-                {
-                    _game.Create(game);
-                }
-
-
+                collection.InsertOne(game);
+                ViewBag.Message = "Emplayee added successfully!";
+                return View();
             }
+
+            return View();
+        }
+
+        public IActionResult Update(string id)
+        {
+            var oId = new ObjectId(id);
+            var game = collection.Find(e => e.Id == oId).FirstOrDefault();
 
             return View(game);
         }
 
-
-        public IActionResult Edit(string id, GameModelMongo gameIn)
+        [HttpPost]
+        public IActionResult Update(string id, GameModelMongo gameIn)
         {
 
-            gameIn. = new ObjectId(id);
-            var filter = Builders<GameModelMongo>.Filter.Eq<"Id", gameIn.Id>
+            gameIn.Id = new ObjectId(id);
+            var filter = Builders<GameModelMongo>.Filter.Eq("Id", gameIn.Id);
 
-            var game = _game.Get(id);
+            var updateField = Builders<GameModelMongo>.Update.Set("Title", gameIn.Title);
+            updateField = updateField.Set("Publisher", gameIn.Publisher);
+            updateField = updateField.Set("ReleaseDate", gameIn.ReleaseDate);
+            updateField = updateField.Set("Genre", gameIn.Genre);
+            updateField = updateField.Set("Description", gameIn.Description);
+            updateField = updateField.Set("Rating", gameIn.Rating);
+            updateField = updateField.Set("Price", gameIn.Price);
+            updateField = updateField.Set("UnitsSold", gameIn.UnitsSold);
 
-            if (game == null)
+            var result = collection.UpdateOne(filter, updateField);
+
+            if (result.IsAcknowledged)
             {
-                return NotFound();
+                ViewBag.Message = "Game updated successfully";
+            }
+            else
+            {
+                ViewBag.Message = "Error while updating Game";
             }
 
-            gameIn.Title = game.Title;
+            return View(gameIn);
+        }
 
-            _game.Update(id, gameIn);
+        public async Task<IActionResult> Delete(string id)
+        {
 
-            return View();
+
+            var oId = new ObjectId(id);
+
+            var filter = Builders<GameModelMongo>.Filter.Eq("Id", oId);
+
+            collection.DeleteMany(filter);
+
+            return Redirect( "/mongoGame");
         }
     }
 }

@@ -29,7 +29,7 @@ namespace MyGameStore.Controllers
                                  orderby g.Genre
                                  select g.Genre;
 
-                var games = from g in _context.Game
+                var games = from g in _context.Game.Take(25000)
                             select g;
 
                 if (!string.IsNullOrEmpty(searchString))
